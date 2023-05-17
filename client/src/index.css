@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #202020;
+  color: aliceblue;
+}
+
+.image-container {
+  width: 200px; /* Ancho deseado */
+  height: 200px; /* Alto deseado */
+  border: 1px solid #ccc; /* Borde deseado */
+  display: flex; /* Opcional: permite centrar la imagen */
+  align-items: center; /* Opcional: centra verticalmente la imagen */
+  justify-content: center; /* Opcional: centra horizontalmente la imagen */
+}
