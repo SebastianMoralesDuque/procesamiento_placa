@@ -1,8 +1,3 @@
 # Django React CRUD
 
-This is a simple Django React CRUD application.
-
-# Environment variables
-
-- VITE_BACKEND_URL, this is neccessary in production, it should be the url of the backend server# django-react-crud-master
-# procesamiento_placa
+Este proyecto es una aplicación web que utiliza las tecnologías React y Django para procesar placas de imágenes y determinar su contenido utilizando inteligencia artificial. Permite a los usuarios cargar imágenes de placas, las cuales son enviadas al backend construido en Django. Allí, se aplica un modelo de IA entrenado para reconocer y extraer información de las placas, como texto o características específicas. Los resultados son devueltos al frontend, donde se muestran al usuario de manera intuitiva. Este proyecto combina el desarrollo frontend y backend para ofrecer una solución integral de procesamiento de placas mediante el uso de tecnologías modernas.
