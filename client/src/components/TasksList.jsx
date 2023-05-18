@@ -23,7 +23,6 @@ export function TasksList() {
   // Cambiar de página
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-
   return (
     <div>
       <div className="grid grid-cols-3 gap-3">
@@ -32,20 +31,24 @@ export function TasksList() {
         ))}
       </div>
       <div className="pagination">
-        <button
-          onClick={() => paginate(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="pagination-button"
-        >
-          &#8592;
-        </button>
-        <button
-          onClick={() => paginate(currentPage + 1)}
-          disabled={indexOfLastTask >= tasks.length}
-          className="pagination-button"
-        >
-           &#8594;
-        </button>
+        <div className="pagination-button-left">
+          <button
+            onClick={() => paginate(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="pagination-button"
+          >
+            &#8592;
+          </button>
+        </div>
+        <div className="pagination-button-right">
+          <button
+            onClick={() => paginate(currentPage + 1)}
+            disabled={indexOfLastTask >= tasks.length}
+            className="pagination-button"
+          >
+            &#8594;
+          </button>
+        </div>
       </div>
     </div>
   );

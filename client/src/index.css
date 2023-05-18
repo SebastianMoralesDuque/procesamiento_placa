@@ -15,3 +15,21 @@ body {
   align-items: center; /* Opcional: centra verticalmente la imagen */
   justify-content: center; /* Opcional: centra horizontalmente la imagen */
 }
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+}
+
+.pagination-button-left {
+  margin-right: auto;
+}
+
+.pagination-button-right {
+  margin-left: auto;
+}
+
+.pagination-button {
+  font-size: 1.5rem; /* Tamaño de fuente más grande */
+  padding: 10px 20px; /* Mayor padding alrededor del texto */
+}
