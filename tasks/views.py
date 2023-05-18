@@ -6,14 +6,13 @@ from rest_framework.response import Response
 from .serializer import TaskSerializer
 from .models import Task
 import os
-from fuzzywuzzy import fuzz
 os.environ['TESSDATA_PREFIX'] = 'tesseract-ocr/tessdata'
 
-from pytesseract import pytesseract
 
 def get_similarity(string1, string2):
-    similarity_ratio = fuzz.ratio(string1.lower(), string2.lower()) / 100
+    similarity_ratio = fuzz.partial_ratio(string1.lower(), string2.lower())
     return similarity_ratio
+
 
 
 def process_image(texto_ingresado, imagen_nombre):
@@ -48,9 +47,6 @@ def process_image(texto_ingresado, imagen_nombre):
 
         # Obtener el texto de la placa utilizando Tesseract OCR
         text = pytesseract.image_to_string(plate_img, lang='spa', config='--psm 8 -c tessedit_char_whitelist=0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ -c tessedit_font_size=12 --oem 1').strip()
-        # Obtener el resultado correcto del usuario y calcular la precisión
-        print(text)
-        print(texto_ingresado)
 
         precision = get_similarity(text,texto_ingresado);
 
@@ -66,10 +62,22 @@ class TaskView(viewsets.ModelViewSet):
         imagen = request.FILES.get('imagen')
         imagen_nombre = str(imagen.name)
         texto_ingresado = request.data.get('texto_ingresado')
-        text, precision = process_image(texto_ingresado,imagen_nombre)
 
-        # Guarda los datos en tu modelo de Django
-        objeto = Task(imagen=imagen, texto_generado=text, texto_ingresado=texto_ingresado, precision=precision)
+        # Guarda los datos iniciales en tu modelo de Django
+        objeto = Task(imagen=imagen, texto_generado="", texto_ingresado=texto_ingresado, precision=0)
+        objeto.save()
+
+        text, precision = process_image(texto_ingresado, imagen_nombre)
+
+        # Obtén los nuevos datos que deseas actualizar
+        nuevo_texto_generado = text
+        nueva_precision = precision
+
+        # Actualiza los campos del objeto
+        objeto.texto_generado = nuevo_texto_generado
+        objeto.precision = nueva_precision
+
+        # Guarda el objeto actualizado en la base de datos
         objeto.save()
 
         serializer = self.get_serializer(objeto)
@@ -78,6 +86,29 @@ class TaskView(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
+
+    def update(self, request, *args, **kwargs):
+        imagen = request.FILES.get('imagen')
+        imagen_nombre = str(imagen.name)
+        texto_ingresado = request.data.get('texto_ingresado')
+        texto_ingresado = texto_ingresado.upper()
+
+        # Obtener el objeto existente
+        instance = self.get_object()
+
+        # Actualizar los campos del objeto
+        instance.texto_ingresado = texto_ingresado
+        instance.imagen = imagen
+
+        # Guardar el objeto en la base de datos
+        instance.save()
+
+        # Procesar la imagen y actualizar los campos adicionales
+        instance.texto_generado, instance.precision = process_image(texto_ingresado, imagen_nombre)
+        instance.save()
+
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
 
 

@@ -24,7 +24,7 @@ export function TaskFormPage() {
         await createTask(formData);
       }
 
-      toast.success("Data sent to backend", {
+      toast.success("Realizado con exito", {
         position: "bottom-right",
         style: {
           background: "#101010",

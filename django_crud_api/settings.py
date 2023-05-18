@@ -21,8 +21,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Configuración de pytesseract
 pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
 pytesseract.pytesseract.tessdata_dir_config = '--tessdata-dir "/home/live/visualstudio/procesamiento_placa/tasks/tesseract-ocr/tessdata/spa.traineddata"'
-TESSDATA_PREFIX = '/usr/share/tesseract-ocr/tessdata/'
-os.environ['TESSDATA_PREFIX'] = TESSDATA_PREFIX
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
