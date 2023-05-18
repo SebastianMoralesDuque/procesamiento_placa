@@ -1,0 +1,18 @@
+server
+pip install -r requirements.txt
+
+react
+npm install
+
+modules
+npm i react-router-dom 
+npm i react-hot-toast
+npm i axios
+npm i react-hook-form
+
+sistema
+
+instalar tesseract y cambiar los directorios de settings.py
+# Configuración de pytesseract
+pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
+pytesseract.pytesseract.tessdata_dir_config = '--tessdata-dir "/home/live/visualstudio/procesamiento_placa/tasks/tesseract-ocr/tessdata/spa.traineddata"'
