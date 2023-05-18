@@ -10,7 +10,6 @@ router.register(r"tasks", views.TaskView, "tasks")
 
 urlpatterns = [
     path("api/v1/", include(router.urls)),
-    path("api/tu-ruta-en-django/", views.YourView.as_view(), name="tu-nombre-de-ruta"),
     path('docs/', include_docs_urls(title='Tasks API')),
 ]
 

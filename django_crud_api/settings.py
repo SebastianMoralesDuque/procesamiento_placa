@@ -13,9 +13,16 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import dj_database_url
 import os
+import pytesseract
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Configuración de pytesseract
+pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
+pytesseract.pytesseract.tessdata_dir_config = '--tessdata-dir "/home/live/visualstudio/procesamiento_placa/tasks/tesseract-ocr/tessdata/spa.traineddata"'
+TESSDATA_PREFIX = '/usr/share/tesseract-ocr/tessdata/'
+os.environ['TESSDATA_PREFIX'] = TESSDATA_PREFIX
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -54,20 +61,20 @@ ROOT_URLCONF = "django_crud_api.urls"
 
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        # Tell Django where to find Reacts index.html file
-        "DIRS": [os.path.join(BASE_DIR, "client", "dist")],
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
             ],
         },
     },
 ]
+
 
 WSGI_APPLICATION = "django_crud_api.wsgi.application"
 
