@@ -41,7 +41,7 @@ export function TaskFormPage() {
       });
     }
 
-    navigate("/tasks");
+    navigate("/placas");
   });
 
   const handleDelete = async () => {
@@ -57,7 +57,7 @@ export function TaskFormPage() {
             color: "#fff",
           },
         });
-        navigate("/tasks");
+        navigate("/placas");
       } catch (error) {
         toast.error("Error deleting task", {
           position: "bottom-right",
@@ -92,17 +92,6 @@ export function TaskFormPage() {
           Guardar
         </button>
       </form>
-
-      {params.id && (
-        <div className="flex justify-end">
-          <button
-            className="bg-red-500 p-3 rounded-lg w-48 mt-3"
-            onClick={handleDelete}
-          >
-            delete
-          </button>
-        </div>
-      )}
     </div>
   );
 }

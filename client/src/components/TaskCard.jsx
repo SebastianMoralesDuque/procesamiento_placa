@@ -9,7 +9,7 @@ export function TaskCard({ task }) {
 <div
   className="bg-zinc-800 p-3 hover:bg-zinc-700 hover:cursor-pointer flex items-center"
   onClick={() => {
-    navigate(`/tasks/${task.id}`);
+    navigate(`/placas/${task.id}`);
   }}
 >
   <div className="image-container">

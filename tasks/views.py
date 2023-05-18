@@ -2,17 +2,20 @@ import cv2
 import pytesseract
 from fuzzywuzzy import fuzz
 from rest_framework import viewsets, status
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializer import TaskSerializer
 from .models import Task
 import os
+
 os.environ['TESSDATA_PREFIX'] = 'tesseract-ocr/tessdata'
 
+
+from django.db.models import Q
 
 def get_similarity(string1, string2):
     similarity_ratio = fuzz.partial_ratio(string1.lower(), string2.lower())
     return similarity_ratio
-
 
 
 def process_image(texto_ingresado, imagen_nombre):
@@ -48,7 +51,7 @@ def process_image(texto_ingresado, imagen_nombre):
         # Obtener el texto de la placa utilizando Tesseract OCR
         text = pytesseract.image_to_string(plate_img, lang='spa', config='--psm 8 -c tessedit_char_whitelist=0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ -c tessedit_font_size=12 --oem 1').strip()
 
-        precision = get_similarity(text,texto_ingresado);
+        precision = get_similarity(text, texto_ingresado)
 
     return text, precision
 
@@ -62,7 +65,7 @@ class TaskView(viewsets.ModelViewSet):
         imagen = request.FILES.get('imagen')
         imagen_nombre = str(imagen.name)
         texto_ingresado = request.data.get('texto_ingresado')
-
+        texto_ingresado = texto_ingresado.upper()
         # Guarda los datos iniciales en tu modelo de Django
         objeto = Task(imagen=imagen, texto_generado="", texto_ingresado=texto_ingresado, precision=0)
         objeto.save()
@@ -84,8 +87,6 @@ class TaskView(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
-
 
     def update(self, request, *args, **kwargs):
         imagen = request.FILES.get('imagen')
@@ -109,6 +110,3 @@ class TaskView(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
-
-
-
