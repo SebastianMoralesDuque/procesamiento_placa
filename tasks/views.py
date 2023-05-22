@@ -1,3 +1,5 @@
+import numpy as np
+from sklearn.metrics import confusion_matrix
 import cv2
 import pytesseract
 from fuzzywuzzy import fuzz
@@ -7,10 +9,7 @@ from rest_framework.response import Response
 from .serializer import TaskSerializer
 from .models import Task
 import os
-
 os.environ['TESSDATA_PREFIX'] = 'tesseract-ocr/tessdata'
-
-
 from django.db.models import Q
 
 def get_similarity(string1, string2):
@@ -57,6 +56,32 @@ def process_image(texto_ingresado, imagen_nombre):
 
 
 
+def generate_confusion_matrix():
+    # Obtener la lista de nombres de imágenes en la base de datos
+    image_folder = os.path.join(os.getcwd(), 'images')
+    image_files = os.listdir(image_folder)
+    
+    # Listas para almacenar las predicciones y etiquetas conocidas
+    predicted_labels = []
+    true_labels = []
+    
+    # Procesar cada imagen y almacenar las predicciones y etiquetas conocidas
+    for image_name in image_files:
+        # Obtener el texto real de la imagen a partir del nombre del archivo
+        texto_real = os.path.splitext(image_name)[0]
+        
+        # Procesar la imagen y obtener la predicción y precisión
+        text, precision = process_image(texto_real, image_name)
+        
+        # Almacenar la predicción y etiqueta conocida
+        predicted_labels.append(text)
+        true_labels.append(texto_real)
+    
+    # Construir la matriz de confusión
+    confusion = confusion_matrix(true_labels, predicted_labels)
+    return confusion
+
+
 class TaskView(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
     queryset = Task.objects.all()
@@ -86,7 +111,17 @@ class TaskView(viewsets.ModelViewSet):
         serializer = self.get_serializer(objeto)
         headers = self.get_success_headers(serializer.data)
 
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        # Generar la matriz de confusión
+        matriz = generate_confusion_matrix()
+        print(matriz)
+
+        # Agregar la matriz al retorno
+        data = {
+            "objeto": serializer.data,
+            "matriz": matriz
+        }
+
+        return Response(data, status=status.HTTP_201_CREATED, headers=headers)
 
     def update(self, request, *args, **kwargs):
         imagen = request.FILES.get('imagen')

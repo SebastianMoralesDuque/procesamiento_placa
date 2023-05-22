@@ -10,6 +10,7 @@ export function TasksList() {
   useEffect(() => {
     async function loadTasks() {
       const res = await getAllTasks();
+      console.log(res.data.matriz); // Agrega este console.log para verificar los datos recibidos
       setTasks(res.data);
     }
     loadTasks();
@@ -22,7 +23,6 @@ export function TasksList() {
 
   // Cambiar de página
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
   return (
     <div>
       <div className="grid grid-cols-3 gap-3">
@@ -50,6 +50,14 @@ export function TasksList() {
           </button>
         </div>
       </div>
+
+      {/* Mostrar la matriz */}
+      {tasks.length > 0 && tasks[0].matriz && (
+        <div>
+          <h2>Matriz de Confusión:</h2>
+          <pre>{JSON.stringify(tasks[0].matriz, null, 2)}</pre>
+        </div>
+      )}
     </div>
   );
 }
